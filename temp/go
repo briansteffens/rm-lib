@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd ..
+./build.sh
+cd temp
+
+cp "../bin/rm-lib.dll" ./
+
+echo "Compiling temp.exe.."
+mcs /out:"temp.exe" \
+    -r:"/usr/lib/mono/4.0/System.Drawing.dll" \
+    -r:"rm-lib.dll" \
+    "temp.cs"
+
+#./temp.exe
