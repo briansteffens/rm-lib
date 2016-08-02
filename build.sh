@@ -11,4 +11,5 @@ dmcs -sdk:4 -debug \
     "src/MessageCtf.cs" \
     "src/Items.cs" \
     "src/Spawn.cs" \
-    "src/RLE.cs"
+    "src/RLE.cs" \
+    "src/Skills.cs"
