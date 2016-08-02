@@ -5,7 +5,7 @@ mkdir -p ../bin
 echo "Compiling rm-lib.dll.."
 dmcs -sdk:4 -debug \
     /target:library \
-    /r:"/usr/lib/mono/4.0/System.Drawing.dll" \
+    /r:"/usr/lib/mono/4.0-api/System.Drawing.dll" \
     /out:"bin/rm-lib.dll" \
     "src/Common.cs" \
     "src/MessageCtf.cs" \
