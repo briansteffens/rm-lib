@@ -10,8 +10,8 @@ namespace RM {
 
 
 /// <summary>
-/// Used to map properties in a subclass of <seealso cref="TextLine" /> 
-/// to their locations in a line of a <seealso cref="TextFile" />. 
+/// Used to map properties in a subclass of <seealso cref="TextLine" />
+/// to their locations in a line of a <seealso cref="TextFile" />.
 /// </summary>
 public class TextFieldAttribute : Attribute
 {
@@ -41,7 +41,7 @@ public abstract class TextLine
         get
         {
             foreach (var pi in this.GetType().GetProperties(
-                        BindingFlags.NonPublic | BindingFlags.Public | 
+                        BindingFlags.NonPublic | BindingFlags.Public |
                         BindingFlags.Instance))
                 if (Attr(pi) != null)
                     yield return pi;
@@ -57,7 +57,7 @@ public abstract class TextLine
     {
         LoadValues(SplitLine(raw));
     }
-    
+
     protected virtual List<string> LoadValues(List<string> values)
     {
         foreach (var pi in Properties)
@@ -98,7 +98,7 @@ public abstract class TextLine
 
             values[ord] = SaveField(pi);
         }
-        
+
         return values;
     }
 
@@ -131,7 +131,7 @@ public sealed class BlankLine : TextLine {}
 /// Represents a comment line (starts with a semi-colon) in a
 /// <seealso cref="TextFile" />.
 /// </summary>
-public sealed class CommentLine : TextLine 
+public sealed class CommentLine : TextLine
 {
     public string Comment { get; set; }
 
@@ -156,8 +156,8 @@ public sealed class CommentLine : TextLine
 
 /// <summary>
 /// Represents a Redmoon text config file, like Mop00###.rsm and MopInfo.rsm.
-/// These files consist of a number of lines, each with a number of values 
-/// separated by whitespace. There are also blank lines and comments which 
+/// These files consist of a number of lines, each with a number of values
+/// separated by whitespace. There are also blank lines and comments which
 /// are both ignored.
 /// </summary>
 public abstract class TextFile<TLine>
@@ -168,13 +168,13 @@ public abstract class TextFile<TLine>
     public void Load(string file_contents)
     {
         AllItems = new List<TextLine>();
-        
+
         foreach (var line in file_contents.Split(ENV.SEP_LINES, STR.SPL_NONE))
         {
             TextLine n = null;
 
             var trimmed = line.Trim();
-            
+
             if (trimmed == "")
                 n = new BlankLine();
             else if (trimmed.StartsWith(";"))
@@ -203,9 +203,9 @@ public abstract class TextFile<TLine>
         return ret.ToString();
     }
 
-    public TLine[] Items 
-    { 
-        get 
+    public TLine[] Items
+    {
+        get
         {
             var ret = new List<TLine>();
 
@@ -291,7 +291,7 @@ public class ByteReader
     /// specified, throws an exception if no null character has been
     /// found after max_length bytes. (kind of like a timeout in networking)
     /// </summary>
-    public string NTSTRING(int max_length = Int32.MaxValue, 
+    public string NTSTRING(int max_length = Int32.MaxValue,
                            Encoding encoding = null)
     {
         var data = new List<byte>();
@@ -299,7 +299,7 @@ public class ByteReader
         for (int i = 0; i < max_length; i++)
         {
             var b = BYTE();
-            
+
             if (b == 0)
                 return (encoding ?? Encoding).GetString(data.ToArray());
 
@@ -334,14 +334,17 @@ public class ByteReader
         return bytes;
     }
 
-    public uint UINT() { 
+    public uint UINT() {
         return BitConverter.ToUInt32(ENDIAN(BYTES(4)), 0); }
 
     public int INT() {
         return BitConverter.ToInt32(ENDIAN(BYTES(4)), 0); }
 
-    public ushort USHORT() { 
+    public ushort USHORT() {
         return BitConverter.ToUInt16(ENDIAN(BYTES(2)), 0); }
+
+    public short SHORT() {
+        return BitConverter.ToInt16(ENDIAN(BYTES(2)), 0); }
 
     public byte BYTE() { return BYTES(1)[0]; }
 }
@@ -391,7 +394,13 @@ public class ByteWriter
     public void UINT(uint val)
         { Raw.Write(ENDIAN(BitConverter.GetBytes(val)), 0, 4); }
 
+    public void INT(int val)
+        { Raw.Write(ENDIAN(BitConverter.GetBytes(val)), 0, 4); }
+
     public void USHORT(ushort val)
+        { Raw.Write(ENDIAN(BitConverter.GetBytes(val)), 0, 2); }
+
+    public void SHORT(short val)
         { Raw.Write(ENDIAN(BitConverter.GetBytes(val)), 0, 2); }
 
     public void BYTE(byte val) { Raw.Write(new byte[] { val }, 0, 1); }
@@ -417,7 +426,7 @@ public static class ENC
     public static Encoding DEFAULT { get { return Encoding.ASCII; } }
     public static Encoding ASCII { get { return Encoding.ASCII; } }
 
-    public static Encoding BIG5 { get { 
+    public static Encoding BIG5 { get {
         return Encoding.GetEncoding("big5"); } }
 
     public static Encoding KR { get {
@@ -428,10 +437,10 @@ public static class ENC
 // String shortcuts
 public static class STR
 {
-    public static readonly 
+    public static readonly
     StringSplitOptions SPL_NONE = StringSplitOptions.None;
 
-    public static readonly 
+    public static readonly
     StringSplitOptions SPL_REMOVE = StringSplitOptions.RemoveEmptyEntries;
 }
 

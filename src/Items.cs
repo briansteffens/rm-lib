@@ -23,7 +23,7 @@ public struct ItemID
 
     public override bool Equals(object other)
     {
-        return other != null && other is ItemID && 
+        return other != null && other is ItemID &&
                ToString() == other.ToString();
     }
 
@@ -36,9 +36,9 @@ public struct ItemID
 
 public abstract class ItemBase
 {
-    public ItemID ID { get; set; }    
+    public ItemID ID { get; set; }
     public uint ImageIndex { get; set; }
-    
+
     public uint HP { get; set; }
     public uint MP { get; set; }
     public uint Attack { get; set; }
@@ -70,7 +70,7 @@ public abstract class ItemFileBase<T> : RedmoonBinaryFile where T : ItemBase
     public uint ItemKind { get; set; }
     public List<T> Items { get; protected set; }
 
-    public override string VERSION_STRING 
+    public override string VERSION_STRING
         { get { return "RedMoon ItemInfo File 1.0"; } }
 
     public ItemFileBase(ByteReader br) : base(br) { }
@@ -102,9 +102,9 @@ public abstract class ItemFileBase<T> : RedmoonBinaryFile where T : ItemBase
         }
 
         item.ImageIndex = br.UINT();
-        
+
         ReadVariableFields(br, item);
-        
+
         item.HP = br.UINT();
         item.MP = br.UINT();
         item.Attack = br.UINT();
@@ -129,7 +129,7 @@ public abstract class ItemFileBase<T> : RedmoonBinaryFile where T : ItemBase
         item.ScatterRange = br.BYTE();
         item.Animation = br.BYTE();
         item.Price = br.UINT();
-        
+
         return item;
     }
 
@@ -252,7 +252,7 @@ public class RSI : ItemFileBase<RSI.Item>
     {
         bw.STRING(item.ShopDescription);
         bw.STRING(item.InventoryDescription);
-    } 
+    }
 }
 
 
