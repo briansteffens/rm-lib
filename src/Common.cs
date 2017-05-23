@@ -11,8 +11,13 @@ namespace RM {
 
 public class InvalidFileException : Exception
 {
+    public InvalidFileException(string message)
+        : base(message)
+    {
+    }
+
     public InvalidFileException()
-        : base("Wrong file type or bad header")
+        : this("Wrong file type or bad header")
     {
     }
 }
