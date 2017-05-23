@@ -132,11 +132,6 @@ namespace RM.v38
                 {
                     Debug.WriteLine("Skipping weird 99999x99999 image");
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("Exception in sprite index {0}", i);
-                    throw ex;
-                }
 
                 if (i < offsets.Count - 1)
                 {
@@ -163,8 +158,8 @@ namespace RM.v38
 
             var res = new Sprite();
 
-            // Length of the resource in bytes minus 4
-            uint res_len = br.UINT();
+            // Expected end of the resource
+            uint endOffset = br.UINT() + (uint)br.Offset;
 
             res.OffsetX = br.UINT();
             res.OffsetY = br.UINT();
@@ -193,81 +188,62 @@ namespace RM.v38
 
             while (true)
             {
-                if (y >= height)
+                switch (br.BYTE())
                 {
-                    throw new Exception("a"); // TODO
+                case 1:
+                    int pixels = br.INT();
 
-                    Console.WriteLine("y exceeded height?");
-                    break;
-                }
-
-                while (true)
-                {
-                    switch (br.BYTE())
+                    for (int p = 0; p < pixels; p++)
                     {
+                        byte left = br.BYTE();
+                        byte right = br.BYTE();
+
+                        bmp.SetPixel(x, y, Palette[left, right]);
+                        x++;
+                    }
+
+                    break;
+
+                // Skip pixels left or right
+                case 2:
+                    x += br.INT() / 2;
+                    break;
+
+                case 3:
+                    byte eof = br.BYTE();
+
+                    switch (eof)
+                    {
+                    case 0:
+                        goto endOfImage;
+
+                    // This doesn't seem to do anything, rewind the reader
                     case 1:
-                        int pixels = br.INT();
-
-                        for (int p = 0; p < pixels; p++)
-                        {
-                            byte left = br.BYTE();
-                            byte right = br.BYTE();
-
-                            if (y >= height)
-                            {
-                                throw new Exception("b"); // TODO
-
-                                Console.WriteLine("y exceeded height?");
-                                goto endOfImage;
-                            }
-
-                            bmp.SetPixel(x, y, Palette[left, right]);
-                            x++;
-                        }
-
+                        br.Offset--;
                         break;
 
-                    // Skip pixels left or right
+                    // Move to the next line and skip pixels left or right
                     case 2:
                         x += br.INT() / 2;
+                        y++;
+
                         break;
 
+                    // Move to the next line but leave x where it is
                     case 3:
-                        byte eof = br.BYTE();
-
-                        switch (eof)
-                        {
-                        case 0:
-                            goto endOfImage;
-
-                        // This doesn't seem to do anything, rewind the reader
-                        case 1:
-                            br.Offset--;
-                            break;
-
-                        // Move to the next line and skip pixels left or right
-                        case 2:
-                            x += br.INT() / 2;
-                            y++;
-
-                            break;
-
-                        // Move to the next line but leave x where it is
-                        case 3:
-                            y++;
-                            break;
-
-                        default:
-                            throw new ImageDataException("Bad eof " + eof);
-                        }
-
+                        y++;
                         break;
 
                     default:
-                        throw new ImageDataException(string.Format(
-                            "Unrecognized entry_type at offset {0}.",
-                            br.Offset));
+                        throw new ImageDataException("Bad eof " + eof);
                     }
+
+                    break;
+
+                default:
+                    throw new ImageDataException(string.Format(
+                        "Unrecognized entry_type at offset {0}.",
+                        br.Offset));
                 }
             }
 
@@ -275,11 +251,11 @@ namespace RM.v38
             res.Image = bmp;
 
             // Check against expected end of resource
-            if (offset + 4 + res_len != br.Offset)
+            if (endOffset != br.Offset)
             {
                 throw new ImageDataException(string.Format(
                     "Expected resource to end at {0} but it was {1}.",
-                    offset + res_len, br.Offset));
+                    endOffset, br.Offset));
             }
 
             return res;
