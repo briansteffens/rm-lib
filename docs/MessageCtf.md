@@ -5,21 +5,19 @@ CTF File Format
 Redmoon client file: Message.ctf
 File type/version: J.C.TypeConvTool Ver 1.1.2
 From Redmoon version: 3.8
-Byte order: little-endian
+Encoding: binary
 ```
 
 This file handles string localization for the Redmoon client.
 
 It is divided into 3 high level sections: header, messages, and categories.
 
+## Header
 
-##Header
+The header for Message.ctf is a static string giving the file type and
+version info. In this case it is `J.C.TypeConvTool Ver 1.1.2`.
 
-The header for Message.ctf is a static string giving the file type and 
-version info. In this case it is "J.C.TypeConvTool Ver 1.1.2".
-
-
-##Messages section
+## Messages section
 
 The messages section starts with a uint giving the total number of messages
 in the file.
@@ -40,21 +38,20 @@ Each message then follows sequentially, with the format:
     string message     - The actual message data
 ```
 
-
-##Categories section
+## Categories section
 
 The categories section defines the categories and subcategories available
 for organizing messages.
 
-This section begins with a uint giving one less than the total number of 
-categories to follow. So a '9' actually means 10 categories are in the list 
+This section begins with a uint giving one less than the total number of
+categories to follow. So a '9' actually means 10 categories are in the list
 (0-9).
 
 Next is the list of categories. Each category begins with a string of the
-category id and name separated by an underscore (Ex: "2_Skills").
+category id and name separated by an underscore (Ex: `2_Skills`).
 
-This is followed by a uint giving one less than the total number of 
+This is followed by a uint giving one less than the total number of
 subcategories in this category.
 
 The subcategories are then listed. Each subcategory is a single string with
-the subcategory id and name separated by an underscore (Ex: "7_Kitara").
+the subcategory id and name separated by an underscore (Ex: `7_Kitara`).
