@@ -2,8 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace RM.v38
+namespace RedMoon.v38
 {
+    public class NotFoundException : Exception
+    {
+        public NotFoundException(string message)
+            : base(message)
+        {
+        }
+    }
+
     public class ListItem
     {
         // Descriptive name
@@ -60,6 +68,20 @@ namespace RM.v38
                     Index = (int)br.UINT()
                 });
             }
+        }
+
+        public ListItem Get(int id)
+        {
+            foreach (var item in Items)
+            {
+                if (item.ID == id)
+                {
+                    return item;
+                }
+            }
+
+            throw new NotFoundException(string.Format(
+                    "List item ID {0} not found.", id));
         }
     }
 }

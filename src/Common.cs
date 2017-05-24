@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 
-namespace RM {
+namespace RedMoon {
 
 
 public class InvalidFileException : Exception

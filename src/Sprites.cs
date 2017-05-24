@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
 
-namespace RM.v38
+namespace RedMoon.v38
 {
     class WeirdSizeException : Exception
     {
@@ -35,6 +35,11 @@ namespace RM.v38
         public SpriteFile()
         {
             Sprites = new List<Sprite>();
+        }
+
+        public SpriteFile(string filename)
+        {
+            Load(filename);
         }
 
         public void Load(string filename)
