@@ -9,6 +9,20 @@ using System.Reflection;
 namespace RM {
 
 
+public class InvalidFileException : Exception
+{
+    public InvalidFileException(string message)
+        : base(message)
+    {
+    }
+
+    public InvalidFileException()
+        : this("Wrong file type or bad header")
+    {
+    }
+}
+
+
 /// <summary>
 /// Used to map properties in a subclass of <seealso cref="TextLine" />
 /// to their locations in a line of a <seealso cref="TextFile" />.
