@@ -134,10 +134,9 @@ namespace RedMoon.v38
                     {
                         var data = br.USHORT();
 
-                        var b = data % 32 * 8;
-                        data /= 32;
-                        var g = data % 64 * 4;
-                        var r = data / 16 * 2;
+                        var b = (byte)((data & 0x1F) / 31.0f * 255);
+                        var g = (byte)((data >> 5 & 0x3F) / 63.0f * 255);
+                        var r = (byte)((data >> 11 & 0x1F) / 31.0f * 255);
 
                         bmp.SetPixel(x, y, Color.FromArgb(255, r, g, b));
                         x++;
