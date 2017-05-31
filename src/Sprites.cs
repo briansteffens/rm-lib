@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
 
-namespace RM.v38
+namespace RedMoon.v38
 {
     class WeirdSizeException : Exception
     {
@@ -35,6 +35,11 @@ namespace RM.v38
         public SpriteFile()
         {
             Sprites = new List<Sprite>();
+        }
+
+        public SpriteFile(string filename)
+        {
+            Load(filename);
         }
 
         public void Load(string filename)
@@ -129,10 +134,9 @@ namespace RM.v38
                     {
                         var data = br.USHORT();
 
-                        var b = data % 32 * 8;
-                        data /= 32;
-                        var g = data % 64 * 4;
-                        var r = data / 16 * 2;
+                        var b = (byte)((data & 0x1F) / 31.0f * 255);
+                        var g = (byte)((data >> 5 & 0x3F) / 63.0f * 255);
+                        var r = (byte)((data >> 11 & 0x1F) / 31.0f * 255);
 
                         bmp.SetPixel(x, y, Color.FromArgb(255, r, g, b));
                         x++;

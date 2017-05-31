@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace RM {
+namespace RedMoon {
 
 
 public struct ItemID
@@ -198,7 +198,7 @@ public abstract class ItemFileBase<T> : RedmoonBinaryFile where T : ItemBase
 }
 
 
-namespace RM.v38 {
+namespace RedMoon.v38 {
 
 
 public class RMI : ItemFileBase<RMI.Item>
