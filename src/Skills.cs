@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-namespace RM
+namespace RedMoon
 {
     public enum ManaUsageStyle
     {

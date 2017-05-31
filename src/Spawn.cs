@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 
-namespace RM {
+namespace RedMoon {
 
 
 // The AI a mob will use, based on a description apparently by Rapap.
@@ -104,7 +104,7 @@ public abstract class MopFileBase<TLine, TDrop> : TextFile<TLine>
 
 
 
-namespace RM.v38 {
+namespace RedMoon.v38 {
 
 
 public class MOP : MopFileBase<MOP.Line, MOP.Drop>
