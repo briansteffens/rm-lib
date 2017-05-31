@@ -11,7 +11,10 @@ Byte order: little-endian
 
 ```
 +0x00
-file_type: string   - A _NON_-Null terminated string identifier for the file.
+file_type_len: u8   - Length of the file type string in bytes.
+
++0x01+len
+file_type: string   - A length -prefixed string identifier for the file.
                       Should contain : "RedMoon MapData 1.0".
 +0x14
 x_dimension: u32    - Number of map tiles in `x` dimension.
