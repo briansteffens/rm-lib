@@ -16,4 +16,7 @@ Contributions, corrections, and suggestions are welcome.
 
 ### Contributions so far
 
-- *cjschneider2* - sprite color decoding logic
+**cjscheider2**
+
+- Sprite color decoding logic
+- Map file headers
